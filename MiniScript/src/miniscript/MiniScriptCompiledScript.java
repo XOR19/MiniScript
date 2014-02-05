@@ -15,7 +15,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 	private byte[] data;
 	private int programPointer;
 	private int[] register;
-	private int[] stack;
+	private int[] ram;
 	private int[] ext;
 	private int[] activePtr;
 	private int ptr;
@@ -239,21 +239,21 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					return ext[ptr];
 				}else{
-					return stack[ptr-ext.length];
+					return ram[ptr-ext.length];
 				}
 			case 2:
 				ptr = register[ptr & 0x1F]+loadPtrOffset();
 				if(ptr<ext.length){
 					return ext[ptr];
 				}else{
-					return stack[ptr-ext.length];
+					return ram[ptr-ext.length];
 				}
 			case 3:
 				ptr = register[ptr & 0x1F]*loadPtrOffset();
 				if(ptr<ext.length){
 					return ext[ptr];
 				}else{
-					return stack[ptr-ext.length];
+					return ram[ptr-ext.length];
 				}
 			default:
 				throwAssertion();
@@ -265,21 +265,21 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					return ext[ptr];
 				}else{
-					return stack[ptr-ext.length];
+					return ram[ptr-ext.length];
 				}
 			case 1:
 				ptr = ((data[programPointer++]&0xFF)<<8)|(data[programPointer++]&0xFF);
 				if(ptr<ext.length){
 					return ext[ptr];
 				}else{
-					return stack[ptr-ext.length];
+					return ram[ptr-ext.length];
 				}
 			case 2:
 				ptr = ((data[programPointer++]&0xFF)<<24)|((data[programPointer++]&0xFF)<<16)|((data[programPointer++]&0xFF)<<8)|(data[programPointer++]&0xFF);
 				if(ptr<ext.length){
 					return ext[ptr];
 				}else{
-					return stack[ptr-ext.length];
+					return ram[ptr-ext.length];
 				}
 			case 3:
 				return data[programPointer++];
@@ -307,7 +307,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					activePtr = ext;
 				}else{
-					activePtr = stack;
+					activePtr = ram;
 					ptr -= ext.length;
 				}
 				break;
@@ -316,7 +316,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					activePtr = ext;
 				}else{
-					activePtr = stack;
+					activePtr = ram;
 					ptr -= ext.length;
 				}
 				break;
@@ -325,7 +325,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					activePtr = ext;
 				}else{
-					activePtr = stack;
+					activePtr = ram;
 					ptr -= ext.length;
 				}
 				break;
@@ -358,7 +358,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 			if(ptr<ext.length){
 				activePtr = ext;
 			}else{
-				activePtr = stack;
+				activePtr = ram;
 				ptr -= ext.length;
 			}
 		}
@@ -378,7 +378,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					activePtr = ext;
 				}else{
-					activePtr = stack;
+					activePtr = ram;
 					ptr -= ext.length;
 				}
 				break;
@@ -387,7 +387,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					activePtr = ext;
 				}else{
-					activePtr = stack;
+					activePtr = ram;
 					ptr -= ext.length;
 				}
 				break;
@@ -396,7 +396,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				if(ptr<ext.length){
 					activePtr = ext;
 				}else{
-					activePtr = stack;
+					activePtr = ram;
 					ptr -= ext.length;
 				}
 				break;
@@ -420,7 +420,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 			if(ptr<ext.length){
 				activePtr = ext;
 			}else{
-				activePtr = stack;
+				activePtr = ram;
 				ptr -= ext.length;
 			}
 		}
@@ -436,11 +436,11 @@ final class MiniScriptCompiledScript extends CompiledScript {
 	}
 	
 	private void checkContext(ScriptContext context) throws ScriptException {
-		Object obj = context.getAttribute(MiniScriptLang.BINDING_STACK);
+		Object obj = context.getAttribute(MiniScriptLang.BINDING_RAM);
 		if(!(obj instanceof int[])){
-			throw new ScriptException(MiniScriptMessages.getLocaleMessage("stack.not.intarray.or.null"));//$NON-NLS-1$
+			throw new ScriptException(MiniScriptMessages.getLocaleMessage("ram.not.intarray.or.null"));//$NON-NLS-1$
 		}
-		stack = (int[])obj;
+		ram = (int[])obj;
 		obj = context.getAttribute(MiniScriptLang.BINDING_REGISTER);
 		if(!(obj instanceof int[])){
 			throw new ScriptException(MiniScriptMessages.getLocaleMessage("registers.not.intarray.or.null"));//$NON-NLS-1$

@@ -20,7 +20,7 @@ final class MiniScriptScriptEngine implements ScriptEngine, Compilable{
 	MiniScriptScriptEngine(MiniScriptScriptEngineFactory factory){
 		this.factory = factory;
 		defaultContext = new SimpleScriptContext();
-		defaultContext.setAttribute(MiniScriptLang.BINDING_STACK, new int[1024], ScriptContext.ENGINE_SCOPE);
+		defaultContext.setAttribute(MiniScriptLang.BINDING_RAM, new int[1024], ScriptContext.ENGINE_SCOPE);
 		defaultContext.setAttribute(MiniScriptLang.BINDING_REGISTER, new int[32], ScriptContext.ENGINE_SCOPE);
 	}
 	

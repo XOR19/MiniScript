@@ -251,7 +251,7 @@ enum MiniScriptASM {
 			int radix = 10;
 			if(!decimal){
 				if(ci.replacements!=null){
-					Integer num = ci.replacements.get(p);
+					Integer num = ci.replacements.get(p.toLowerCase());
 					if(num!=null)
 						return num;
 				}

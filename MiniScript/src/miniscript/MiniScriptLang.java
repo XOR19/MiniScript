@@ -44,7 +44,7 @@ public final class MiniScriptLang {
 	public static final int CMP_EQ = 1;
 	public static final int CMP_BIG = 2;
 	
-	public static final String BINDING_STACK = "stack";//$NON-NLS-1$
+	public static final String BINDING_RAM = "ram";//$NON-NLS-1$
 	public static final String BINDING_EXT = "ext";//$NON-NLS-1$
 	public static final String BINDING_REGISTER = "register";//$NON-NLS-1$
 	

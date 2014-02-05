@@ -30,7 +30,7 @@ final class MiniScriptMessages {
 		defaultMessages.put("function.not.exists", "Function %s not exists");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("unknow.instruction", "Unknown instruction %s");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("assertion.error", "This should never be happend :/");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("stack.not.intarray.or.null", "Stack isn't a int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("ram.not.intarray.or.null", "RAM isn't a int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("registers.not.intarray.or.null", "Register array isn't a int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("not.32.registers", "Expect an array size or 32 for registers");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("allready.exectuting", "Script is allready executing, please wait");//$NON-NLS-1$ //$NON-NLS-2$
