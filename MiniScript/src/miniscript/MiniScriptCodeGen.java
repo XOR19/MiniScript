@@ -118,7 +118,7 @@ final class MiniScriptCodeGen {
 			}
 		}else{
 			for(int i=index2; i<=index1; i++){
-				dist += instructions.get(i).getSize(this, instructions);
+				dist -= instructions.get(i).getSize(this, instructions);
 			}
 		}
 		return dist;
