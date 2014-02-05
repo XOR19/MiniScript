@@ -194,6 +194,20 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				}
 				}
 				break;
+			case MiniScriptLang.INST_SWITCH:
+				{
+				int paramCount = (data[programPointer++]<<8)|(data[programPointer++]&0xFF);
+				int s = loadValue();
+				if(s>=0 && s<paramCount){
+					programPointer += s*2;
+					int jump = (data[programPointer++]<<8)|(data[programPointer++]&0xFF);
+					programPointer += (paramCount-s-1)*2;
+					programPointer += jump;
+				}else{
+					programPointer += paramCount*2;
+				}
+				}
+				break;
 			default:
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("unknow.instruction", inst));//$NON-NLS-1$
 			}

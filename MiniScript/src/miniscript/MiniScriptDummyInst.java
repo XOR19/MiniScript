@@ -66,7 +66,7 @@ abstract class MiniScriptDummyInst {
 		
 		@Override
 		void resolve(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
-			ttarget = codeGen.getTarget(target);
+			ttarget = codeGen.getTarget(line, target);
 		}
 
 		@Override
@@ -174,7 +174,7 @@ abstract class MiniScriptDummyInst {
 		void resolve(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
 			ttargets = new MiniScriptDummyInst[targets.length];
 			for(int i=0; i<targets.length; i++){
-				ttargets[i] = codeGen.getTarget(targets[i]);
+				ttargets[i] = codeGen.getTarget(line, targets[i]);
 			}
 		}
 
@@ -190,14 +190,14 @@ abstract class MiniScriptDummyInst {
 
 		@Override
 		void delete(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions, MiniScriptDummyInst inst) {
-			for(MiniScriptDummyInst ttarget:ttargets){
-				if(ttarget==inst){
+			for(int i=0; i<ttargets.length; i++){
+				if(ttargets[i]==inst){
 					int index = instructions.indexOf(inst);
 					index++;
 					if(instructions.size()==index){
-						ttarget = null;
+						ttargets[i] = null;
 					}else{
-						ttarget = instructions.get(index);
+						ttargets[i] = instructions.get(index);
 					}
 				}
 			}

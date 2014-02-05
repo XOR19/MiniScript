@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.tools.DiagnosticListener;
+import javax.tools.Diagnostic.Kind;
+
 import miniscript.MiniScriptDummyInst.DummyInstLabel;
 
 final class MiniScriptCodeGen {
 
 	private List<MiniScriptDummyInst> instructions = new ArrayList<MiniScriptDummyInst>();
+	private DiagnosticListener<Void> diagnosticListener;
+	private boolean errored;
 	
-	MiniScriptCodeGen(){
-		
+	MiniScriptCodeGen(DiagnosticListener<Void> diagnosticListener){
+		this.diagnosticListener = diagnosticListener;
 	}
 	
 	byte[] getData() {
@@ -28,6 +33,8 @@ final class MiniScriptCodeGen {
 		for(MiniScriptDummyInst inst:instructions){
 			pos = inst.compile(this, instructions, data, pos);
 		}
+		if(errored)
+			return null;
 		return data;
 	}
 
@@ -92,7 +99,7 @@ final class MiniScriptCodeGen {
 		instructions.add(inst);
 	}
 
-	MiniScriptDummyInst getTarget(String target) {
+	MiniScriptDummyInst getTarget(int line, String target) {
 		for(MiniScriptDummyInst inst:instructions){
 			if(inst instanceof DummyInstLabel){
 				if(((DummyInstLabel) inst).label.equals(target)){
@@ -100,6 +107,8 @@ final class MiniScriptCodeGen {
 				}
 			}
 		}
+		errored = true;
+		diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, line, "target.not.found", target));//$NON-NLS-1$
 		return null;
 	}
 

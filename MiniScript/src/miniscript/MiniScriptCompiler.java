@@ -29,13 +29,13 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 	@SuppressWarnings("unchecked")
 	MiniScriptCompiler(MiniScriptScriptEngine engine) {
 		this.engine = engine;
-		codeGen = new MiniScriptCodeGen();
 		Object obj = engine.get(MiniScriptLang.COMPILER_DIAGNOSTICLISTENER);
 		if(obj instanceof DiagnosticListener){
 			diagnosticListener = (DiagnosticListener<Void>)obj;
 		}else{
 			diagnosticListener = this;
 		}
+		codeGen = new MiniScriptCodeGen(diagnosticListener);
 		obj = engine.get(MiniScriptLang.COMPILER_REPLACEMENTS);
 		if(obj instanceof HashMap){
 			replacements = (HashMap<String, Integer>) obj;
@@ -64,6 +64,13 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
+		byte[] data = codeGen.getData();
+		if(data==null){
+			if(firstDiagnostic==null){
+				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
+			}
+			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
+		}
 		return new MiniScriptCompiledScript(engine, codeGen.getData());
 	}
 
@@ -86,7 +93,14 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, codeGen.getData());
+		byte[] data = codeGen.getData();
+		if(data==null){
+			if(firstDiagnostic==null){
+				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
+			}
+			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
+		}
+		return new MiniScriptCompiledScript(engine, data);
 	}
 	
 	private void compileLine(String line, int lineNum){
