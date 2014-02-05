@@ -365,7 +365,7 @@ public final class MiniScriptLang {
 	 */
 	public static final String BINDING_EXT = "ext";//$NON-NLS-1$
 	/**
-	 * register position in the binding, need to be a int array
+	 * register position in the binding, need to be a 32 long int array
 	 */
 	public static final String BINDING_REGISTER = "register";//$NON-NLS-1$
 	

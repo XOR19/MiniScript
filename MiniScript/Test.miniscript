@@ -1,5 +1,0 @@
-mov [0], 4
-mov r1, 12
-mov [r1], [0]
-add [R0+2], 7
-ext 0, r0, r1
