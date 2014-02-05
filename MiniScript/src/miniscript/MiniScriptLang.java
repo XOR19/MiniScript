@@ -51,7 +51,7 @@ public final class MiniScriptLang {
 	 * not register<br>
 	 * not [pointer]
 	 * </code><br>
-	 * in java: <code>value = ~value<code>
+	 * in java: <code>value = ~value</code>
 	 */
 	public static final int INST_NOT = 1;
 	/**
@@ -61,7 +61,7 @@ public final class MiniScriptLang {
 	 * neg register<br>
 	 * neg [pointer]
 	 * </code><br>
-	 * in java: <code>value = -value<code>
+	 * in java: <code>value = -value</code>
 	 */
 	public static final int INST_NEG = 2;
 	/**
@@ -71,7 +71,7 @@ public final class MiniScriptLang {
 	 * inc register<br>
 	 * inc [pointer]
 	 * </code><br>
-	 * in java: <code>value++<code>
+	 * in java: <code>value++</code>
 	 */
 	public static final int INST_INC = 3;
 	/**
@@ -81,7 +81,7 @@ public final class MiniScriptLang {
 	 * dec register<br>
 	 * dec [pointer]
 	 * </code><br>
-	 * in java: <code>value--<code>
+	 * in java: <code>value--</code>
 	 */
 	public static final int INST_DEC = 4;
 	/**
@@ -95,7 +95,7 @@ public final class MiniScriptLang {
 	 * add register, const<br>
 	 * add [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 += value2<code>
+	 * in java: <code>value1 += value2</code>
 	 */
 	public static final int INST_ADD = 5;
 	/**
@@ -109,7 +109,7 @@ public final class MiniScriptLang {
 	 * sub register, const<br>
 	 * sub [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 -= value2<code>
+	 * in java: <code>value1 -= value2</code>
 	 */
 	public static final int INST_SUB = 6;
 	/**
@@ -123,7 +123,7 @@ public final class MiniScriptLang {
 	 * mul register, const<br>
 	 * mul [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 *= value2<code>
+	 * in java: <code>value1 *= value2</code>
 	 */
 	public static final int INST_MUL = 7;
 	/**
@@ -137,7 +137,7 @@ public final class MiniScriptLang {
 	 * div register, const<br>
 	 * div [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 /= value2<code>
+	 * in java: <code>value1 /= value2</code>
 	 */
 	public static final int INST_DIV = 8;
 	/**
@@ -151,7 +151,7 @@ public final class MiniScriptLang {
 	 * mod register, const<br>
 	 * mod [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 %= value2<code>
+	 * in java: <code>value1 %= value2</code>
 	 */
 	public static final int INST_MOD = 9;
 	/**
@@ -165,7 +165,7 @@ public final class MiniScriptLang {
 	 * shl register, const<br>
 	 * shl [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 <<= value2<code>
+	 * in java: <code>value1 <<= value2</code>
 	 */
 	public static final int INST_SHL = 10;
 	/**
@@ -179,7 +179,7 @@ public final class MiniScriptLang {
 	 * shr register, const<br>
 	 * shr [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 >>= value2<code>
+	 * in java: <code>value1 >>= value2</code>
 	 */
 	public static final int INST_SHR = 11;
 	/**
@@ -193,7 +193,7 @@ public final class MiniScriptLang {
 	 * ushr register, const<br>
 	 * ushr [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 >>>= value2<code>
+	 * in java: <code>value1 >>>= value2</code>
 	 */
 	public static final int INST_USHR = 12;
 	/**
@@ -207,7 +207,7 @@ public final class MiniScriptLang {
 	 * and register, const<br>
 	 * and [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 &= value2<code>
+	 * in java: <code>value1 &= value2</code>
 	 */
 	public static final int INST_AND = 13;
 	/**
@@ -221,7 +221,7 @@ public final class MiniScriptLang {
 	 * or register, const<br>
 	 * or [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 |= value2<code>
+	 * in java: <code>value1 |= value2</code>
 	 */
 	public static final int INST_OR = 14;
 	/**
@@ -235,7 +235,7 @@ public final class MiniScriptLang {
 	 * xor register, const<br>
 	 * xor [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 ^= value2<code>
+	 * in java: <code>value1 ^= value2</code>
 	 */
 	public static final int INST_XOR = 15;
 	/**
@@ -249,7 +249,7 @@ public final class MiniScriptLang {
 	 * mov register, const<br>
 	 * mov [pointer], const
 	 * </code><br>
-	 * in java: <code>value1 = value2<code>
+	 * in java: <code>value1 = value2</code>
 	 */
 	public static final int INST_MOV = 16;
 	/**
@@ -266,7 +266,7 @@ public final class MiniScriptLang {
 	 * cmp [pointer], const<br>
 	 * cmp const, const
 	 * </code><br>
-	 * in java: <code>value1.compareTo(value2)<code><br>
+	 * in java: <code>value1.compareTo(value2)</code><br>
 	 * puts the result in <code>r0</code>
 	 */
 	public static final int INST_CMP = 17;
