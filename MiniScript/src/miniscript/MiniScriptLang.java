@@ -9,9 +9,9 @@ public final class MiniScriptLang {
 	public static final String ENGINE_VERSION = "1.0.0";//$NON-NLS-1$
 	public static final String LANG_NAME = NAME;
 	public static final String LANG_VERSION = "1.0.0";//$NON-NLS-1$
-	public static final List<String> EXTENSIONS = new MiniScriptImmutableList<String>(new String[]{});
-	public static final List<String> MIME = new MiniScriptImmutableList<String>(new String[]{});
-	public static final List<String> NAMES = new MiniScriptImmutableList<String>(new String[]{NAME});
+	public static final List<String> EXTENSIONS = new MiniScriptImmutableList<String>();
+	public static final List<String> MIME = new MiniScriptImmutableList<String>();
+	public static final List<String> NAMES = new MiniScriptImmutableList<String>(NAME);
 	
 	public static final int INST_NOT = 1;
 	public static final int INST_NEG = 2;

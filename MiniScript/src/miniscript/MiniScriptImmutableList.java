@@ -12,7 +12,7 @@ final class MiniScriptImmutableList<E> implements List<E> {
 	private int start;
 	private int end;
 	
-	MiniScriptImmutableList(E[] array){
+	MiniScriptImmutableList(E...array){
 		this.array = array;
 		start = 0;
 		end = array.length;
