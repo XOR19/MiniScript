@@ -158,6 +158,72 @@ abstract class MiniScriptDummyInst {
 		
 	}
 	
+	final static class DummyInstSwitch extends MiniScriptDummyInst{
+
+		MiniScriptValue value;
+		String[] targets;
+		private MiniScriptDummyInst[] ttargets;
+		
+		DummyInstSwitch(MiniScriptASM asm, int line, MiniScriptValue value, String[] targets) {
+			super(asm, line);
+			this.value = value;
+			this.targets = targets;
+		}
+		
+		@Override
+		void resolve(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
+			ttargets = new MiniScriptDummyInst[targets.length];
+			for(int i=0; i<targets.length; i++){
+				ttargets[i] = codeGen.getTarget(targets[i]);
+			}
+		}
+
+		@Override
+		boolean isPointingTo(MiniScriptDummyInst inst) {
+			for(MiniScriptDummyInst ttarget:ttargets){
+				if(ttarget==inst){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		void delete(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions, MiniScriptDummyInst inst) {
+			for(MiniScriptDummyInst ttarget:ttargets){
+				if(ttarget==inst){
+					int index = instructions.indexOf(inst);
+					index++;
+					if(instructions.size()==index){
+						ttarget = null;
+					}else{
+						ttarget = instructions.get(index);
+					}
+				}
+			}
+		}
+
+		@Override
+		int getSize(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
+			return 3+value.getSize()+ttargets.length*2;
+		}
+
+		@Override
+		int compile(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions, byte[] data, int pos) {
+			data[pos++] = (byte) asm.id;
+			data[pos++] = (byte) (ttargets.length>>8);
+			data[pos++] = (byte) ttargets.length;
+			pos = value.writeTo(data, pos);
+			for(MiniScriptDummyInst ttarget:ttargets){
+				int dist = codeGen.getDist(this, ttarget);
+				data[pos++] = (byte) (dist>>8);
+				data[pos++] = (byte) dist;
+			}
+			return pos;
+		}
+		
+	}
+	
 	MiniScriptASM asm;
 	
 	int line;

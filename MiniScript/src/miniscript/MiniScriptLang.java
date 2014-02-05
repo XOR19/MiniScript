@@ -344,6 +344,16 @@ public final class MiniScriptLang {
 	public static final int INST_NATIVE = 26;
 	
 	/**
+	 * The instruction id for the <code>switch</code> instruction<br>
+	 * usage:<br>
+	 * <code>
+	 * switch register, label_on_0, label_on_1, ...<br>
+	 * switch [pointer], label_on_0, label_on_1, ...
+	 * </code>
+	 */
+	public static final int INST_SWITCH = 27;
+	
+	/**
 	 * Mask for the compare bits in r0
 	 */
 	public static final int CMP_MASK = 3;

@@ -22,6 +22,9 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 	private DiagnosticListener<Void> diagnosticListener;
 	private Diagnostic<?> firstDiagnostic;
 	private HashMap<String, Integer> replacements;
+	private String lineBev;
+	private int startLine;
+	private HashMap<String, Integer> labels = new HashMap<String, Integer>();
 	
 	@SuppressWarnings("unchecked")
 	MiniScriptCompiler(MiniScriptScriptEngine engine) {
@@ -88,6 +91,11 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 	
 	private void compileLine(String line, int lineNum){
 		try{
+			if(lineBev!=null){
+				line = lineBev+line;
+				lineBev=null;
+				lineNum = startLine;
+			}
 			int index = line.indexOf(';');
 			if(index!=-1){
 				line = line.substring(0, index);
@@ -95,6 +103,10 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			line = line.trim();
 			if(line.isEmpty())
 				return;
+			if(line.endsWith("_")){
+				startLine = lineNum;
+				lineBev = line.substring(0, line.length()-1).trim();
+			}
 			String[] s = line.split("\\s", 2);//$NON-NLS-1$
 			String[] p = null;
 			if(s.length>1){
@@ -104,7 +116,7 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			MiniScriptDummyInst inst;
 			if(asm==null){
 				if(line.charAt(line.length()-1)==':'){
-					inst = new DummyInstLabel(lineNum, line.substring(0, line.length()-1).trim());
+					inst = new DummyInstLabel(lineNum, checkLabelName(line.substring(0, line.length()-1).trim(), lineNum));
 				}else{
 					inst = null;
 					diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, lineNum, "expected.label.end"));//$NON-NLS-1$
@@ -123,6 +135,29 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 		}
 	}
 
+	private String checkLabelName(String name, int lineNum){
+		name = name.trim();
+		if(name.isEmpty()){
+			diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, lineNum, "empty.label"));//$NON-NLS-1$
+			return "!error!";
+		}
+		Integer bevore = labels.get(name.toLowerCase());
+		if(bevore!=null){
+			diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, lineNum, "duplicated.label", name, bevore));//$NON-NLS-1$
+			return "!error!";
+		}
+		for(int i=0; i<name.length(); i++){
+			char c = name.charAt(i);
+			if(!((c>='A' && c<='Z') || (c>='a' && c<='z') || c=='_' || (c>='0' && c<='9'))){
+				diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, lineNum, "label.with.bad.characters", name));//$NON-NLS-1$
+				break;
+			}
+		}
+		name = name.toLowerCase();
+		labels.put(name, lineNum);
+		return name;
+	}
+	
 	@Override
 	public void report(Diagnostic<? extends Void> diagnostic) {
 		if(firstDiagnostic==null && diagnostic.getKind()==Kind.ERROR){

@@ -34,6 +34,9 @@ final class MiniScriptMessages {
 		defaultMessages.put("registers.not.intarray.or.null", "Register array isn't a int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("not.32.registers", "Expect an array size or 32 for registers");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("allready.exectuting", "Script is allready executing, please wait");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("empty.label", "Empty label");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("duplicated.label", "Duplicated label %s, bevore declared here: %s");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("label.with.bad.characters", "Bad characters in label %s");//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private static HashMap<String, String> loadLocale(Locale locale){
