@@ -20,7 +20,7 @@ public final class MiniScriptLang {
 	 */
 	public static final String ENGINE_NAME = NAME;
 	/**
-	 * The engine version. To get allways the right, use {@link javax.script.ScriptEngineFactory.getEngineVersion}
+	 * The engine version. To get allways the right, use {@link javax.script.ScriptEngineFactory}.getEngineVersion()
 	 */
 	public static final String ENGINE_VERSION = "1.0.0";//$NON-NLS-1$
 	/**
@@ -28,7 +28,7 @@ public final class MiniScriptLang {
 	 */
 	public static final String LANG_NAME = NAME;
 	/**
-	 * The language version. To get allways the right, use {@link javax.script.ScriptEngineFactory.getLanguageVersion}
+	 * The language version. To get allways the right, use {@link javax.script.ScriptEngineFactory}.getLanguageVersion()
 	 */
 	public static final String LANG_VERSION = "1.0.0";//$NON-NLS-1$
 	/**

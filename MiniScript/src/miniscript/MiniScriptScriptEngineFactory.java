@@ -27,8 +27,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 	
 	/**
 	 * The name of the engine
-	 * @see MiniScriptLang.ENGINE_NAME
-	 * @return {@link MiniScriptLang.ENGINE_NAME}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.ENGINE_NAME
 	 */
 	@Override
 	public String getEngineName() {
@@ -37,8 +37,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * The engine version
-	 * @see MiniScriptLang.ENGINE_VERSION
-	 * @return {@link MiniScriptLang.ENGINE_VERSION}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.ENGINE_VERSION
 	 */
 	@Override
 	public String getEngineVersion() {
@@ -47,8 +47,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * The File extension for this language
-	 * @see MiniScriptLang.EXTENSIONS
-	 * @return {@link MiniScriptLang.EXTENSIONS}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.EXTENSIONS
 	 */
 	@Override
 	public List<String> getExtensions() {
@@ -57,8 +57,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * The language version
-	 * @see MiniScriptLang.LANG_NAME
-	 * @return {@link MiniScriptLang.LANG_NAME}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.LANG_NAME
 	 */
 	@Override
 	public String getLanguageName() {
@@ -67,8 +67,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * The mime types for this language
-	 * @see MiniScriptLang.LANG_VERSION
-	 * @return {@link MiniScriptLang.LANG_VERSION}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.LANG_VERSION
 	 */
 	@Override
 	public String getLanguageVersion() {
@@ -96,8 +96,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * The mime types for this language
-	 * @see MiniScriptLang.MIME
-	 * @return {@link MiniScriptLang.MIME}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.MIME
 	 */
 	@Override
 	public List<String> getMimeTypes() {
@@ -106,8 +106,8 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * The short names
-	 * @see MiniScriptLang.NAMES
-	 * @return {@link MiniScriptLang.NAMES}
+	 * @see MiniScriptLang
+	 * @return {@link MiniScriptLang}.NAMES
 	 */
 	@Override
 	public List<String> getNames() {
@@ -126,10 +126,11 @@ public final class MiniScriptScriptEngineFactory implements ScriptEngineFactory 
 
 	/**
 	 * gets the parameter for a specific option
-	 * @param key the key, can be one of {{@link ScriptEngine.ENGINE}, 
-	 * {@link ScriptEngine.ENGINE_VERSION}, {@link ScriptEngine.LANGUAGE}, 
-	 * {@link ScriptEngine.LANGUAGE_VERSION}, {@link ScriptEngine.NAME}}
+	 * @param key the key, can be one of {{@link ScriptEngine}.ENGINE, 
+	 * {@link ScriptEngine}.ENGINE_VERSION, {@link ScriptEngine}.LANGUAGE, 
+	 * {@link ScriptEngine}.LANGUAGE_VERSION, {@link ScriptEngine}.NAME}
 	 * @return the specific parameter
+	 * @see ScriptEngine
 	 */
 	@Override
 	public Object getParameter(String key) {
