@@ -208,6 +208,14 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				}
 				}
 				break;
+			case MiniScriptLang.INST_RND:
+				{
+				loadPtr();
+				int min = loadValue();
+				int max = loadValue();
+				activePtr[ptr]=(int)(Math.random()*(max-min))+min;
+				}
+				break;
 			default:
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("unknow.instruction", inst));//$NON-NLS-1$
 			}

@@ -48,6 +48,8 @@ enum MiniScriptASM {
 	EXT(Type.NATIVE, MiniScriptLang.INST_NATIVE),
 	
 	SWITCH(Type.SWITCH, MiniScriptLang.INST_SWITCH),
+	
+	RND(Type.NORMAL3, MiniScriptLang.INST_RND)
 	;
 
 	final Type type;
@@ -99,6 +101,17 @@ enum MiniScriptASM {
 					return null;
 				}else{
 					return new DummyInstNormal(ci.asm, ci.line, readRegOrPtr(ci, p[0]), readValue(ci, p[1]));
+				}
+			}
+		},
+		NORMAL3{
+			@Override
+			protected MiniScriptDummyInst makeInst(CompileInfo ci, String[] p) {
+				if(p.length!=3){
+					makeDiagnostic(ci, Kind.ERROR, "expect.three.param", p.length);//$NON-NLS-1$
+					return null;
+				}else{
+					return new DummyInstNormal(ci.asm, ci.line, readRegOrPtr(ci, p[0]), readValue(ci, p[1]), readValue(ci, p[2]));
 				}
 			}
 		},
@@ -185,11 +198,19 @@ enum MiniScriptASM {
 			if(p.charAt(0)=='['){
 				return readPtr(ci, p);
 			}else if(p.charAt(0)=='r' || p.charAt(0)=='R'){
-				return readReg(ci, p);
+				if(p.length()>1 && isNum(p.charAt(1))){
+					return readReg(ci, p);
+				}else{
+					return readNum(ci, p);
+				}
 			}else{
 				return readNum(ci, p);
 			}
 		}
+	}
+	
+	private static boolean isNum(char c){
+		return c>='0' && c<='9';
 	}
 	
 	private static MiniScriptValue readValueOrReg(CompileInfo ci, String p){

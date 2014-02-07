@@ -31,24 +31,30 @@ abstract class MiniScriptDummyInst {
 
 		MiniScriptValue v1;
 		
-		MiniScriptValue v2;
+		MiniScriptValue[] vs;
 		
-		DummyInstNormal(MiniScriptASM asm, int line, MiniScriptValue v1, MiniScriptValue v2) {
+		DummyInstNormal(MiniScriptASM asm, int line, MiniScriptValue v1, MiniScriptValue...vs) {
 			super(asm, line);
 			this.v1 = v1;
-			this.v2 = v2;
+			this.vs = vs;
 		}
 
 		@Override
 		int getSize(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
-			return 1+v1.getSize()+v2.getSize();
+			int size = 1+v1.getSize();
+			for(MiniScriptValue v:vs){
+				size += v.getSize();
+			}
+			return size;
 		}
 
 		@Override
 		int compile(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions, byte[] data, int pos) {
 			data[pos++] = (byte) asm.id;
 			pos = v1.writeTo(data, pos);
-			pos = v2.writeTo(data, pos);
+			for(MiniScriptValue v:vs){
+				pos = v.writeTo(data, pos);
+			}
 			return pos;
 		}
 		

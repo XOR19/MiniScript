@@ -354,6 +354,33 @@ public final class MiniScriptLang {
 	public static final int INST_SWITCH = 27;
 	
 	/**
+	 * The instruction id for the <code>rnd</code> instruction<br>
+	 * usage:<br>
+	 * <code>
+	 * rnd register, register, register<br>
+	 * rnd register, register, [pointer]<br>
+	 * rnd register, register, const<br>
+	 * rnd register, [pointer], register<br>
+	 * rnd register, [pointer], [pointer]<br>
+	 * rnd register, [pointer], const<br>
+	 * rnd register, const, register<br>
+	 * rnd register, const, [pointer]<br>
+	 * rnd register, const, const<br>
+	 * rnd [pointer], register, register<br>
+	 * rnd [pointer], register, [pointer]<br>
+	 * rnd [pointer], register, const<br>
+	 * rnd [pointer], [pointer], register<br>
+	 * rnd [pointer], [pointer], [pointer]<br>
+	 * rnd [pointer], [pointer], const<br>
+	 * rnd [pointer], const, register<br>
+	 * rnd [pointer], const, [pointer]<br>
+	 * rnd [pointer], const, const<br>
+	 * </code><br>
+	 * in java: <code>value1 = (int)((Math.random()*(value3-value2))+value2)</code>
+	 */
+	public static final int INST_RND = 28;
+	
+	/**
 	 * Mask for the compare bits in r0
 	 */
 	public static final int CMP_MASK = 3;
