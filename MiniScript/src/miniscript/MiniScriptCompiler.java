@@ -71,7 +71,7 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, codeGen.getData());
+		return new MiniScriptCompiledScript(engine, data);
 	}
 
 	@Override

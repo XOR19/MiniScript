@@ -32,6 +32,10 @@ final class MiniScriptCompiledScript extends CompiledScript {
 			context.setAttribute(EXECUTING_SCRIPT, true, ScriptContext.ENGINE_SCOPE);
 			execute(context);
 		}finally{
+			register = null;
+			ram = null;
+			ext = null;
+			activePtr = null;
 			context.setAttribute(EXECUTING_SCRIPT, false, ScriptContext.ENGINE_SCOPE);
 		}
 		return null;
