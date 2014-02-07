@@ -89,7 +89,7 @@ enum MiniScriptASM {
 					makeDiagnostic(ci, Kind.ERROR, "expect.one.param", p.length);//$NON-NLS-1$
 					return null;
 				}else{
-					return new DummyInstUnary(ci.asm, ci.line, readReg(ci, p[0]));
+					return new DummyInstUnary(ci.asm, ci.line, readRegOrPtr(ci, p[0]));
 				}
 			}
 		},
@@ -220,7 +220,11 @@ enum MiniScriptASM {
 			return null;
 		}else{
 			if(p.charAt(0)=='r' || p.charAt(0)=='R'){
-				return readReg(ci, p);
+				if(p.length()>1 && isNum(p.charAt(1))){
+					return readReg(ci, p);
+				}else{
+					return readNum(ci, p);
+				}
 			}else{
 				return readNum(ci, p);
 			}
