@@ -414,6 +414,10 @@ public final class MiniScriptLang {
 	 * position in the binding for the replacements, need to be a HashMap<String, Integer>
 	 */
 	public static final String COMPILER_REPLACEMENTS = "replacements";//$NON-NLS-1$
+	/**
+	 * position in the binding for the backjump disabled flag, need to be Boolean
+	 */
+	public static final String COMPILER_BACKJUMPDISABLED = "backjumpdisabled";//$NON-NLS-1$
 	
 	private MiniScriptLang(){
 		throw new InstantiationError();

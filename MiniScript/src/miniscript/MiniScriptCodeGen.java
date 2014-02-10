@@ -14,9 +14,11 @@ final class MiniScriptCodeGen {
 	private List<MiniScriptDummyInst> instructions = new ArrayList<MiniScriptDummyInst>();
 	private DiagnosticListener<Void> diagnosticListener;
 	private boolean errored;
+	private boolean backjumpDisabled;
 	
-	MiniScriptCodeGen(DiagnosticListener<Void> diagnosticListener){
+	MiniScriptCodeGen(DiagnosticListener<Void> diagnosticListener, boolean backjumpDisabled){
 		this.diagnosticListener = diagnosticListener;
+		this.backjumpDisabled = backjumpDisabled;
 	}
 	
 	byte[] getData() {
@@ -99,16 +101,23 @@ final class MiniScriptCodeGen {
 		instructions.add(inst);
 	}
 
-	MiniScriptDummyInst getTarget(int line, String target) {
-		for(MiniScriptDummyInst inst:instructions){
-			if(inst instanceof DummyInstLabel){
-				if(((DummyInstLabel) inst).label.equals(target)){
+	MiniScriptDummyInst getTarget(MiniScriptDummyInst inst, String target) {
+		boolean notYet = backjumpDisabled;
+		for(MiniScriptDummyInst inst1:instructions){
+			if(inst1 == inst)
+				notYet = false;
+			if(inst1 instanceof DummyInstLabel){
+				if(((DummyInstLabel) inst1).label.equals(target)){
+					if(notYet){
+						errored = true;
+						diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, inst.line, "backjump.not.allowed", target));//$NON-NLS-1$
+					}
 					return inst;
 				}
 			}
 		}
 		errored = true;
-		diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, line, "target.not.found", target));//$NON-NLS-1$
+		diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, inst.line, "target.not.found", target));//$NON-NLS-1$
 		return null;
 	}
 

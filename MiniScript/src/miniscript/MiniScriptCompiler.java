@@ -35,7 +35,8 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 		}else{
 			diagnosticListener = this;
 		}
-		codeGen = new MiniScriptCodeGen(diagnosticListener);
+		obj = engine.get(MiniScriptLang.COMPILER_BACKJUMPDISABLED);
+		codeGen = new MiniScriptCodeGen(diagnosticListener, obj instanceof Boolean && (Boolean)obj);
 		obj = engine.get(MiniScriptLang.COMPILER_REPLACEMENTS);
 		if(obj instanceof HashMap){
 			replacements = (HashMap<String, Integer>) obj;

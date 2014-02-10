@@ -72,7 +72,7 @@ final class MiniScriptImmutableList<E> implements List<E> {
 	public int indexOf(Object obj) {
 		for(int i=start; i<end; i++){
 			if(array[i].equals(obj)){
-				return i;
+				return i-start;
 			}
 		}
 		return -1;
@@ -92,7 +92,7 @@ final class MiniScriptImmutableList<E> implements List<E> {
 	public int lastIndexOf(Object obj) {
 		for(int i=end-1; i>=start; i--){
 			if(array[i].equals(obj)){
-				return i;
+				return i-start;
 			}
 		}
 		return -1;

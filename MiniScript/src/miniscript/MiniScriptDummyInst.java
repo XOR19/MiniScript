@@ -72,7 +72,7 @@ abstract class MiniScriptDummyInst {
 		
 		@Override
 		void resolve(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
-			ttarget = codeGen.getTarget(line, target);
+			ttarget = codeGen.getTarget(this, target);
 		}
 
 		@Override
@@ -180,7 +180,7 @@ abstract class MiniScriptDummyInst {
 		void resolve(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
 			ttargets = new MiniScriptDummyInst[targets.length];
 			for(int i=0; i<targets.length; i++){
-				ttargets[i] = codeGen.getTarget(line, targets[i]);
+				ttargets[i] = codeGen.getTarget(this, targets[i]);
 			}
 		}
 
