@@ -1,6 +1,9 @@
 package miniscript;
 
+import java.util.Arrays;
 import java.util.List;
+
+import miniscript.MiniScriptValue.ValueNum;
 
 abstract class MiniScriptDummyInst {
 
@@ -167,20 +170,68 @@ abstract class MiniScriptDummyInst {
 	final static class DummyInstSwitch extends MiniScriptDummyInst{
 
 		MiniScriptValue value;
+		ValueNum[] targetIDs;
 		String[] targets;
+		private int min;
+		private int numSize;
+		private int[] sortedNums;
 		private MiniScriptDummyInst[] ttargets;
+		private static final DummyInstLabel DEFAULT_JUMP = new DummyInstLabel(0, "dummy");
 		
-		DummyInstSwitch(MiniScriptASM asm, int line, MiniScriptValue value, String[] targets) {
+		DummyInstSwitch(MiniScriptASM asm, int line, MiniScriptValue value, ValueNum[] targetIDs, String[] targets) {
 			super(asm, line);
 			this.value = value;
+			this.targetIDs = targetIDs;
 			this.targets = targets;
 		}
 		
 		@Override
 		void resolve(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
-			ttargets = new MiniScriptDummyInst[targets.length];
-			for(int i=0; i<targets.length; i++){
-				ttargets[i] = codeGen.getTarget(this, targets[i]);
+			min = Integer.MAX_VALUE;
+			int max = Integer.MIN_VALUE;
+			for(int i=0; i<targetIDs.length; i++){
+				if(min>targetIDs[i].num){
+					min = targetIDs[i].num;
+				}
+				if(max<targetIDs[i].num){
+					max = targetIDs[i].num;
+				}
+			}
+			int diff = max-min+1;
+			numSize = new ValueNum(diff/2).getSize()-1;
+			if(diff>targets.length/2.0*(2+numSize)){
+				ttargets = new MiniScriptDummyInst[targets.length];
+				sortedNums = new int[targets.length];
+				for(int i=0; i<targets.length; i++){
+					sortedNums[i] = targetIDs[i].num;
+				}
+				Arrays.sort(sortedNums);
+				for(int i=0; i<targets.length; i++){
+					for(int j=0; j<sortedNums.length; j++){
+						if(sortedNums[j]==targetIDs[i].num){
+							ttargets[j] = codeGen.getTarget(this, targets[i]);
+							break;
+						}
+					}
+				}
+				int off = min+diff/2;
+				for(int i=0; i<sortedNums.length; i++){
+					sortedNums[i] -= off;
+				}
+				min = -diff/2;
+			}else{
+				ttargets = new MiniScriptDummyInst[diff];
+				for(int i=0; i<diff; i++){
+					for(int j=0; j<targets.length; j++){
+						if(targetIDs[j].num==i-min){
+							ttargets[i] = codeGen.getTarget(this, targets[j]);
+							break;
+						}
+					}
+					if(ttargets[i]==null){
+						ttargets[i] = DEFAULT_JUMP;
+					}
+				}
 			}
 		}
 
@@ -211,7 +262,13 @@ abstract class MiniScriptDummyInst {
 
 		@Override
 		int getSize(MiniScriptCodeGen codeGen, List<MiniScriptDummyInst> instructions) {
-			return 3+value.getSize()+ttargets.length*2;
+			int size = 4+value.getSize()+new ValueNum(min).getSize();
+			if(sortedNums==null){
+				size += ttargets.length*2;
+			}else{
+				size += ttargets.length*(2+numSize);
+			}
+			return size;
 		}
 
 		@Override
@@ -219,11 +276,30 @@ abstract class MiniScriptDummyInst {
 			data[pos++] = (byte) asm.id;
 			data[pos++] = (byte) (ttargets.length>>8);
 			data[pos++] = (byte) ttargets.length;
+			pos = new ValueNum(min).writeTo(data, pos);
 			pos = value.writeTo(data, pos);
-			for(MiniScriptDummyInst ttarget:ttargets){
-				int dist = codeGen.getDist(this, ttarget);
-				data[pos++] = (byte) (dist>>8);
-				data[pos++] = (byte) dist;
+			if(sortedNums==null){
+				data[pos++] = 0;
+				for(MiniScriptDummyInst ttarget:ttargets){
+					int dist = ttarget==DEFAULT_JUMP?0:codeGen.getDist(this, ttarget);
+					data[pos++] = (byte) (dist>>8);
+					data[pos++] = (byte) dist;
+				}
+			}else{
+				data[pos++] = (byte) numSize;
+				for(int i=0; i<ttargets.length; i++){
+					if(numSize>=4){
+						data[pos++] = (byte) (sortedNums[i]>>24);
+						data[pos++] = (byte) (sortedNums[i]>>16);
+					}
+					if(numSize>=2){
+						data[pos++] = (byte) (sortedNums[i]>>8);
+					}
+					data[pos++] = (byte) (sortedNums[i]);
+					int dist = codeGen.getDist(this, ttargets[i]);
+					data[pos++] = (byte) (dist>>8);
+					data[pos++] = (byte) dist;
+				}
 			}
 			return pos;
 		}

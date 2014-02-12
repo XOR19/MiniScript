@@ -1,5 +1,7 @@
 package miniscript;
 
+import java.util.Arrays;
+
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -202,13 +204,83 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				{
 				int paramCount = (data[programPointer++]<<8)|(data[programPointer++]&0xFF);
 				int s = loadValue();
-				if(s>=0 && s<paramCount){
-					programPointer += s*2;
-					int jump = (data[programPointer++]<<8)|(data[programPointer++]&0xFF);
-					programPointer += (paramCount-s-1)*2;
-					programPointer += jump;
+				s = loadValue()+s;
+				int type = data[programPointer++]&0xFF;
+				if(type==0){
+					if(s>=0 && s<paramCount){
+						programPointer += s*2;
+						int jump = (data[programPointer++]<<8)|(data[programPointer++]&0xFF);
+						programPointer += (paramCount-s-1)*2;
+						programPointer += jump;
+					}else{
+						programPointer += paramCount*2;
+					}
+				}else if(type==1){
+					int min = 0;
+					int max = paramCount-1;
+					while(true){
+						int pos = (min+max)/2;
+						int dataPos = programPointer+pos*3;
+						int val = data[dataPos];
+						if(val<s){
+							min = pos+(min+max)%2;
+							continue;
+						}else if(val>s){
+							max = pos;
+						}else{
+							programPointer += paramCount*3;
+							programPointer += (data[dataPos+1]<<8)|(data[dataPos+2]&0xFF);
+							break;
+						}
+						if(min==max){
+							programPointer += paramCount*3;
+							break;
+						}
+					}
+				}else if(type==2){
+					int min = 0;
+					int max = paramCount-1;
+					while(true){
+						int pos = (min+max)/2;
+						int dataPos = programPointer+pos*4;
+						int val = (data[dataPos]<<8)|(data[dataPos+1]&0xFF);
+						if(val<s){
+							min = pos+(min+max)%2;
+							continue;
+						}else if(val>s){
+							max = pos;
+						}else{
+							programPointer += paramCount*4;
+							programPointer += (data[dataPos+1]<<8)|(data[dataPos+2]&0xFF);
+							break;
+						}
+						if(min==max){
+							programPointer += paramCount*4;
+							break;
+						}
+					}
 				}else{
-					programPointer += paramCount*2;
+					int min = 0;
+					int max = paramCount-1;
+					while(true){
+						int pos = (min+max)/2;
+						int dataPos = programPointer+pos*6;
+						int val = (data[dataPos]<<24)|((data[dataPos+1]&0xFF)<<16)|((data[dataPos+2]&0xFF)<<8)|(data[dataPos+3]&0xFF);
+						if(val<s){
+							min = pos+(min+max)%2;
+							continue;
+						}else if(val>s){
+							max = pos;
+						}else{
+							programPointer += paramCount*6;
+							programPointer += (data[dataPos+1]<<8)|(data[dataPos+2]&0xFF);
+							break;
+						}
+						if(min==max){
+							programPointer += paramCount*6;
+							break;
+						}
+					}
 				}
 				}
 				break;
@@ -483,6 +555,10 @@ final class MiniScriptCompiledScript extends CompiledScript {
 		obj = context.getAttribute(EXECUTING_SCRIPT);
 		if(obj instanceof Boolean && (Boolean)obj)
 			throw new ScriptException(MiniScriptMessages.getLocaleMessage("allready.exectuting"));//$NON-NLS-1$
+	}
+	
+	public byte[] getByteCode(){
+		return Arrays.copyOf(data, data.length);
 	}
 	
 }

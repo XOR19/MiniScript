@@ -160,11 +160,19 @@ enum MiniScriptASM {
 					return null;
 				}else{
 					MiniScriptValue v = readValue(ci, p[0]);
+					ValueNum[] targetIDs = new ValueNum[p.length-1];
 					String[] targets = new String[p.length-1];
 					for(int i=0; i<targets.length; i++){
-						targets[i] = checkLabelName(ci, p[i+1]);
+						String[] target = p[i+1].split(":", 2);//$NON-NLS-1$
+						targetIDs[i] = readNum(ci, target[0]);
+						if(target.length==1){
+							targets[i] = checkLabelName(ci, "");//$NON-NLS-1$
+						}else{
+							targets[i] = checkLabelName(ci, target[1]);
+						}
 					}
-					return new DummyInstSwitch(ci.asm, ci.line, v, targets);
+					checkDuplicated(ci, targetIDs);
+					return new DummyInstSwitch(ci.asm, ci.line, v, targetIDs, targets);
 				}
 			}
 		};
@@ -309,6 +317,7 @@ enum MiniScriptASM {
 
 	private static int readIntNum(CompileInfo ci, String p, boolean decimal){
 		int radix = 10;
+		p = p.trim();
 		if(!decimal){
 			if(ci.replacements!=null){
 				Integer num = ci.replacements.get(p.toLowerCase());
@@ -353,6 +362,16 @@ enum MiniScriptASM {
 			}
 		}
 		return name.toLowerCase();
+	}
+	
+	private static void checkDuplicated(CompileInfo ci, ValueNum[] nums){
+		for(int i=0; i<nums.length-1; i++){
+			for(int j=i+1; j<nums.length; j++){
+				if(nums[i].num == nums[j].num){
+					makeDiagnostic(ci, Kind.ERROR, "duplicated.case.numbers", nums[i].num);//$NON-NLS-1$
+				}
+			}
+		}
 	}
 	
 	private static void makeDiagnostic(CompileInfo ci, Kind kind, String message, Object...args){

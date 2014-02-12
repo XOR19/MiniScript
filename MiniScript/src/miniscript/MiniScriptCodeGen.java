@@ -112,7 +112,7 @@ final class MiniScriptCodeGen {
 						errored = true;
 						diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, inst.line, "backjump.not.allowed", target));//$NON-NLS-1$
 					}
-					return inst;
+					return inst1;
 				}
 			}
 		}

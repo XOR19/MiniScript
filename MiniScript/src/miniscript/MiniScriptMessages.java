@@ -40,6 +40,7 @@ final class MiniScriptMessages {
 		defaultMessages.put("target.not.found", "Target %s not found");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("expect.three.param", "Expect 3 param for %s but got %s");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("backjump.not.allowed", "Backjump not allowed");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("duplicated.case.numbers", "Duplicated case %2$s");//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private static HashMap<String, String> loadLocale(Locale locale){

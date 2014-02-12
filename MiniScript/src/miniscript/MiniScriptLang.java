@@ -347,8 +347,8 @@ public final class MiniScriptLang {
 	 * The instruction id for the <code>switch</code> instruction<br>
 	 * usage:<br>
 	 * <code>
-	 * switch register, label_on_0, label_on_1, ...<br>
-	 * switch [pointer], label_on_0, label_on_1, ...
+	 * switch register, 0:label_on_0, 1:label_on_1, x:label_on_x, ...<br>
+	 * switch [pointer], 0:label_on_0, 1:label_on_1, x:label_on_x, ...
 	 * </code>
 	 */
 	public static final int INST_SWITCH = 27;
