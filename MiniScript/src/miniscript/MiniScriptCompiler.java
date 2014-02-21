@@ -154,11 +154,13 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 		name = name.trim();
 		if(name.isEmpty()){
 			diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, lineNum, "empty.label"));//$NON-NLS-1$
+			codeGen = null;
 			return "!error!";
 		}
 		Integer bevore = labels.get(name.toLowerCase());
 		if(bevore!=null){
 			diagnosticListener.report(new MiniScriptDiagnostic(Kind.ERROR, lineNum, "duplicated.label", name, bevore));//$NON-NLS-1$
+			codeGen = null;
 			return "!error!";
 		}
 		for(int i=0; i<name.length(); i++){
