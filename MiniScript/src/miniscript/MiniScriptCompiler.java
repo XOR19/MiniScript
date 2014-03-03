@@ -3,10 +3,8 @@ package miniscript;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map.Entry;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -45,20 +43,12 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 		}
 	}
 	
-	private Object[] entryLines(){
-		HashMap<String, Integer> startVectors=(HashMap<String, Integer>) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTORS);
+	private int[] entryLines(){
+		String[] startVectors=(String[]) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTORS);
 		if(startVectors==null){
-			return new Object[]{new String[0], new int[0]};
+			return new int[0];
 		}
-		Object[] array= new Object[2];
-		
-		String[] entryNames = (String[]) (array[0] = startVectors.keySet().toArray());
-		int[] entryLines = (int[]) (array[1] = new int[entryNames.length]);
-		int i=0;
-		for(Integer e:startVectors.values()){
-			entryLines[i++]=e.intValue();
-		}
-		return array;
+		return new int[startVectors.length];
 	}
 
 	@Override
@@ -83,15 +73,15 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		Object[] ret = entryLines();
-		byte[] data = codeGen.getData((int[]) ret[1]);
+		int[] ret = entryLines();
+		byte[] data = codeGen.getData(ret);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data, (String[]) ret[0],(int[]) ret[1]);
+		return new MiniScriptCompiledScript(engine, data, ret);
 	}
 
 	@Override
@@ -113,15 +103,15 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		Object[] ret = entryLines();
-		byte[] data = codeGen.getData((int[]) ret[1]);
+		int[] ret = entryLines();
+		byte[] data = codeGen.getData(ret);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data, (String[]) ret[0],(int[]) ret[1]);
+		return new MiniScriptCompiledScript(engine, data, ret);
 	}
 	
 	private void compileLine(String line, int lineNum){

@@ -21,14 +21,11 @@ final class MiniScriptCompiledScript extends CompiledScript {
 	private int[] ext;
 	private int[] activePtr;
 	private int ptr;
-	
-	private String[] startVectorNames;
 	private int[] startVectorIndexes;
 	
-	MiniScriptCompiledScript(MiniScriptScriptEngine engine, byte[] data, String[] startVectorNames, int[] startVectorIndexes){
+	MiniScriptCompiledScript(MiniScriptScriptEngine engine, byte[] data, int[] startVectorIndexes){
 		this.engine = engine;
 		this.data = data;
-		this.startVectorNames = startVectorNames;
 		this.startVectorIndexes = startVectorIndexes;
 	}
 	
@@ -48,23 +45,10 @@ final class MiniScriptCompiledScript extends CompiledScript {
 		return null;
 	}
 	
-	public int getStartProgramPointer(String vector) throws ScriptException{
-		if(startVectorNames==null)
-			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entrynames.not.string.array"));//$NON-NLS-1$
-		if(startVectorIndexes==null)
-			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entryindexes.not.int.array"));//$NON-NLS-1$
-		int vec = Arrays.asList(startVectorNames).indexOf(vector);
-		System.out.println("startVecIndex:"+vec);
-		if(vec==-1)
-			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entry.not.exist", vector));//$NON-NLS-1$
-		System.out.println("startVecValue:"+startVectorIndexes[vec]);
-		return startVectorIndexes[vec];
-	}
-	
 	private void execute(ScriptContext context) throws ScriptException{
 		programPointer = 0;
 		int start_vec=((Integer) context.getAttribute(MiniScriptLang.BINDING_START_VECTOR)).intValue();
-		if(start_vec>=0 && start_vec<startVectorIndexes.length)
+		if(startVectorIndexes!=null && start_vec>=0 && start_vec<startVectorIndexes.length)
 			programPointer = startVectorIndexes[start_vec];
 		while(programPointer<data.length){
 			int inst = data[programPointer++]&0xFF;
@@ -311,6 +295,21 @@ final class MiniScriptCompiledScript extends CompiledScript {
 				int min = loadValue();
 				int max = loadValue();
 				activePtr[ptr]=(int)(Math.random()*(max-min))+min;
+				}
+				break;
+			case MiniScriptLang.INST_ELM:
+				int paramCount = data[programPointer++]&0xFF;
+				register[0] &= ~MiniScriptLang.CMP_MASK;
+				v = loadValue();
+				for(int i=0; i<paramCount; i++){
+					v2 = loadValue();
+					if(v==v2){
+						register[0] |= MiniScriptLang.CMP_EQ;
+						while(++i<paramCount){
+							loadValue();
+						}
+						break;
+					}
 				}
 				break;
 			default:

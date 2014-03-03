@@ -34,6 +34,7 @@ enum MiniScriptASM {
 	OR(Type.NORMAL, MiniScriptLang.INST_OR),
 	XOR(Type.NORMAL, MiniScriptLang.INST_XOR),
 	MOV(Type.NORMAL, MiniScriptLang.INST_MOV),
+	
 	CMP(Type.COMP, MiniScriptLang.INST_CMP),
 	
 	JMP(Type.JUMP, MiniScriptLang.INST_JMP),
@@ -49,7 +50,9 @@ enum MiniScriptASM {
 	
 	SWITCH(Type.SWITCH, MiniScriptLang.INST_SWITCH),
 	
-	RND(Type.NORMAL3, MiniScriptLang.INST_RND)
+	RND(Type.NORMAL3, MiniScriptLang.INST_RND),
+	
+	ELM(Type.GROUP, MiniScriptLang.INST_ELM)
 	;
 
 	final Type type;
@@ -173,6 +176,20 @@ enum MiniScriptASM {
 					}
 					checkDuplicated(ci, targetIDs);
 					return new DummyInstSwitch(ci.asm, ci.line, v, targetIDs, targets);
+				}
+			}
+		}, GROUP{
+			@Override
+			protected MiniScriptDummyInst makeInst(CompileInfo ci, String[] p) {
+				if(p.length<3){
+					makeDiagnostic(ci, Kind.ERROR, "use.compare.instead", p.length);//$NON-NLS-1$
+					return null;
+				}else{
+					MiniScriptValue v[] = new MiniScriptValue[p.length];
+					for(int i=0; i<p.length; i++){
+						v[i] = readValue(ci, p[i]);
+					}
+					return new DummyInstNative(ci.asm, ci.line, v);
 				}
 			}
 		};

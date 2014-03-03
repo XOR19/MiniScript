@@ -44,6 +44,7 @@ final class MiniScriptMessages {
 		defaultMessages.put("entry.not.exist", "The entry vector %s doesn't exist");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("entrynames.not.string.array", "The entry vector names aren't a String array");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("entryindexes.not.int.array", "The entry vector indexes aren't an int array");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("use.compare.instead", "Expect at least 3 params for %s but got %s");//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private static HashMap<String, String> loadLocale(Locale locale){

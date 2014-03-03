@@ -1,6 +1,5 @@
 package miniscript;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -382,6 +381,15 @@ public final class MiniScriptLang {
 	public static final int INST_RND = 28;
 	
 	/**
+	 * The instruction id for the <code>elm</code> instruction<br>
+	 * usage:<br>
+	 * <code>
+	 * elm value, v1, v2, ...
+	 * </code>
+	 */
+	public static final int INST_ELM = 29;
+		
+	/**
 	 * Mask for the compare bits in r0
 	 */
 	public static final int CMP_MASK = 3;
@@ -424,7 +432,7 @@ public final class MiniScriptLang {
 	 */
 	public static final String COMPILER_BACKJUMPDISABLED = "backjumpdisabled";//$NON-NLS-1$
 	/**
-	 * position in the binding for the entry vector names, needs to be HashMap<String, Integer>
+	 * position in the binding for the entry vector names, needs to be String[]
 	 */
 	public static final String COMPILER_START_VECTORS = "vectors";//$NON-NLS-1$
 
