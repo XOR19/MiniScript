@@ -22,9 +22,14 @@ final class MiniScriptCompiledScript extends CompiledScript {
 	private int[] activePtr;
 	private int ptr;
 	
-	MiniScriptCompiledScript(MiniScriptScriptEngine engine, byte[] data){
+	private String[] startVectorNames;
+	private int[] startVectorIndexes;
+	
+	MiniScriptCompiledScript(MiniScriptScriptEngine engine, byte[] data, String[] startVectorNames, int[] startVectorIndexes){
 		this.engine = engine;
 		this.data = data;
+		this.startVectorNames = startVectorNames;
+		this.startVectorIndexes = startVectorIndexes;
 	}
 	
 	@Override
@@ -43,8 +48,22 @@ final class MiniScriptCompiledScript extends CompiledScript {
 		return null;
 	}
 	
+	private int getStartProgramPointer(String vector) throws ScriptException{
+		if(startVectorNames==null)
+			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entrynames.not.string.array"));//$NON-NLS-1$
+		if(startVectorIndexes==null)
+			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entryindexes.not.int.array"));//$NON-NLS-1$
+		int vec = Arrays.asList(startVectorNames).indexOf(vector);
+		if(vec==-1)
+			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entry.not.exist", vector));//$NON-NLS-1$
+		return startVectorIndexes[vec];
+	}
+	
 	private void execute(ScriptContext context) throws ScriptException{
 		programPointer = 0;
+		String start_vec=(String) context.getAttribute(MiniScriptLang.BINDING_START_VECTOR);
+		programPointer = getStartProgramPointer(start_vec);
+		
 		while(programPointer<data.length){
 			int inst = data[programPointer++]&0xFF;
 			int v, v2;
@@ -552,9 +571,10 @@ final class MiniScriptCompiledScript extends CompiledScript {
 		}else{
 			ext = NULL_EXT;
 		}
+		ram = (int[])obj;
 		obj = context.getAttribute(EXECUTING_SCRIPT);
 		if(obj instanceof Boolean && (Boolean)obj)
-			throw new ScriptException(MiniScriptMessages.getLocaleMessage("allready.exectuting"));//$NON-NLS-1$
+			throw new ScriptException(MiniScriptMessages.getLocaleMessage("already.executing"));//$NON-NLS-1$
 	}
 	
 	public byte[] getByteCode(){

@@ -65,14 +65,16 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		byte[] data = codeGen.getData();
+		String[] startVectors=(String[]) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTOR_NAMES);
+		int[] startVectors_int = new int[startVectors!=null?startVectors.length:0];
+		byte[] data = codeGen.getData(startVectors_int);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data);
+		return new MiniScriptCompiledScript(engine, data, startVectors!=null?startVectors:new String[0], startVectors_int);
 	}
 
 	@Override
@@ -94,14 +96,16 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		byte[] data = codeGen.getData();
+		String[] startVectors=(String[]) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTOR_NAMES);
+		int[] startVectors_int = new int[startVectors!=null?startVectors.length:0];
+		byte[] data = codeGen.getData(startVectors_int);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data);
+		return new MiniScriptCompiledScript(engine, data, startVectors!=null?startVectors:new String[0], startVectors_int);
 	}
 	
 	private void compileLine(String line, int lineNum){

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.DiagnosticListener;
 
 import miniscript.MiniScriptDummyInst.DummyInstLabel;
 
@@ -21,7 +21,7 @@ final class MiniScriptCodeGen {
 		this.backjumpDisabled = backjumpDisabled;
 	}
 	
-	byte[] getData() {
+	byte[] getData(int[] startVectors) {
 		for(MiniScriptDummyInst inst:instructions){
 			inst.resolve(this, instructions);
 		}
@@ -32,7 +32,10 @@ final class MiniScriptCodeGen {
 		}
 		byte[] data = new byte[size];
 		int pos = 0;
+		int i=0;
 		for(MiniScriptDummyInst inst:instructions){
+			if(startVectors.length>i)
+				startVectors[i++]=pos;
 			pos = inst.compile(this, instructions, data, pos);
 		}
 		if(errored)

@@ -30,10 +30,10 @@ final class MiniScriptMessages {
 		defaultMessages.put("function.not.exists", "Function %s not exists");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("unknow.instruction", "Unknown instruction %s");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("assertion.error", "This should never be happend :/");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("ram.not.intarray.or.null", "RAM isn't a int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("ram.not.intarray.or.null", "RAM isn't an int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("registers.not.intarray.or.null", "Register array isn't a int array or is null");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("not.32.registers", "Expect an array size or 32 for registers");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("allready.exectuting", "Script is allready executing, please wait");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("already.executing", "Script is already executing, please wait");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("empty.label", "Empty label");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("duplicated.label", "Duplicated label %s, bevore declared here: %s");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("label.with.bad.characters", "Bad characters in label %s");//$NON-NLS-1$ //$NON-NLS-2$
@@ -41,6 +41,9 @@ final class MiniScriptMessages {
 		defaultMessages.put("expect.three.param", "Expect 3 param for %s but got %s");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("backjump.not.allowed", "Backjump not allowed");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("duplicated.case.numbers", "Duplicated case %2$s");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("entry.not.exist", "The entry vector %s doesn't exist");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("entrynames.not.string.array", "The entry vector names aren't a String array");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("entryindexes.not.int.array", "The entry vector indexes aren't an int array");//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private static HashMap<String, String> loadLocale(Locale locale){

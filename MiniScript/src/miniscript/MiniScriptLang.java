@@ -405,6 +405,10 @@ public final class MiniScriptLang {
 	 * register position in the binding, need to be a 32 long int array
 	 */
 	public static final String BINDING_REGISTER = "register";//$NON-NLS-1$
+	/**
+	 * StartVector position in the binding, need to be an entry name specified in COMPILER_START_VECTOR_NAMES
+	 */
+	public static final String BINDING_START_VECTOR = "vec";//$NON-NLS-1$
 	
 	/**
 	 * position in the binding for the diagnostic listener for compilation
@@ -418,6 +422,10 @@ public final class MiniScriptLang {
 	 * position in the binding for the backjump disabled flag, need to be Boolean
 	 */
 	public static final String COMPILER_BACKJUMPDISABLED = "backjumpdisabled";//$NON-NLS-1$
+	/**
+	 * position in the binding for the entry vector names, needs to be a string array 
+	 */
+	public static final String COMPILER_START_VECTOR_NAMES = "vectornames";//$NON-NLS-1$
 	
 	private MiniScriptLang(){
 		throw new InstantiationError();
