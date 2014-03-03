@@ -1,5 +1,6 @@
 package miniscript;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -423,9 +424,10 @@ public final class MiniScriptLang {
 	 */
 	public static final String COMPILER_BACKJUMPDISABLED = "backjumpdisabled";//$NON-NLS-1$
 	/**
-	 * position in the binding for the entry vector names, needs to be a string array 
+	 * position in the binding for the entry vector names, needs to be HashMap<String, Integer>
 	 */
-	public static final String COMPILER_START_VECTOR_NAMES = "vectornames";//$NON-NLS-1$
+	public static final String COMPILER_START_VECTORS = "vectors";//$NON-NLS-1$
+
 	
 	private MiniScriptLang(){
 		throw new InstantiationError();

@@ -3,8 +3,10 @@ package miniscript;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -42,6 +44,22 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			replacements = (HashMap<String, Integer>) obj;
 		}
 	}
+	
+	private Object[] entryLines(){
+		HashMap<String, Integer> startVectors=(HashMap<String, Integer>) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTORS);
+		if(startVectors==null){
+			return new Object[]{new String[0], new int[0]};
+		}
+		Object[] array= new Object[2];
+		
+		String[] entryNames = (String[]) (array[0] = startVectors.keySet().toArray());
+		int[] entryLines = (int[]) (array[1] = new int[entryNames.length]);
+		int i=0;
+		for(Integer e:startVectors.values()){
+			entryLines[i++]=e.intValue();
+		}
+		return array;
+	}
 
 	@Override
 	public CompiledScript compile(String script) throws ScriptException {
@@ -65,16 +83,15 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		String[] startVectors=(String[]) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTOR_NAMES);
-		int[] startVectors_int = new int[startVectors!=null?startVectors.length:0];
-		byte[] data = codeGen.getData(startVectors_int);
+		Object[] ret = entryLines();
+		byte[] data = codeGen.getData((int[]) ret[1]);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data, startVectors!=null?startVectors:new String[0], startVectors_int);
+		return new MiniScriptCompiledScript(engine, data, (String[]) ret[0],(int[]) ret[1]);
 	}
 
 	@Override
@@ -96,16 +113,15 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		String[] startVectors=(String[]) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTOR_NAMES);
-		int[] startVectors_int = new int[startVectors!=null?startVectors.length:0];
-		byte[] data = codeGen.getData(startVectors_int);
+		Object[] ret = entryLines();
+		byte[] data = codeGen.getData((int[]) ret[1]);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data, startVectors!=null?startVectors:new String[0], startVectors_int);
+		return new MiniScriptCompiledScript(engine, data, (String[]) ret[0],(int[]) ret[1]);
 	}
 	
 	private void compileLine(String line, int lineNum){

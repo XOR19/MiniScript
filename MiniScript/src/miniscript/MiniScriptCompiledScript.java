@@ -48,22 +48,24 @@ final class MiniScriptCompiledScript extends CompiledScript {
 		return null;
 	}
 	
-	private int getStartProgramPointer(String vector) throws ScriptException{
+	public int getStartProgramPointer(String vector) throws ScriptException{
 		if(startVectorNames==null)
 			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entrynames.not.string.array"));//$NON-NLS-1$
 		if(startVectorIndexes==null)
 			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entryindexes.not.int.array"));//$NON-NLS-1$
 		int vec = Arrays.asList(startVectorNames).indexOf(vector);
+		System.out.println("startVecIndex:"+vec);
 		if(vec==-1)
 			throw new ScriptException(MiniScriptMessages.getLocaleMessage("entry.not.exist", vector));//$NON-NLS-1$
+		System.out.println("startVecValue:"+startVectorIndexes[vec]);
 		return startVectorIndexes[vec];
 	}
 	
 	private void execute(ScriptContext context) throws ScriptException{
 		programPointer = 0;
-		String start_vec=(String) context.getAttribute(MiniScriptLang.BINDING_START_VECTOR);
-		programPointer = getStartProgramPointer(start_vec);
-		
+		int start_vec=((Integer) context.getAttribute(MiniScriptLang.BINDING_START_VECTOR)).intValue();
+		if(start_vec>=0 && start_vec<startVectorIndexes.length)
+			programPointer = startVectorIndexes[start_vec];
 		while(programPointer<data.length){
 			int inst = data[programPointer++]&0xFF;
 			int v, v2;

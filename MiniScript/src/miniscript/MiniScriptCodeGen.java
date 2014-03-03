@@ -32,10 +32,11 @@ final class MiniScriptCodeGen {
 		}
 		byte[] data = new byte[size];
 		int pos = 0;
-		int i=0;
+		int i=0, each=0;
 		for(MiniScriptDummyInst inst:instructions){
-			if(startVectors.length>i)
+			if(startVectors.length>i && startVectors[i]==each)
 				startVectors[i++]=pos;
+			each++;
 			pos = inst.compile(this, instructions, data, pos);
 		}
 		if(errored)
