@@ -432,9 +432,9 @@ public final class MiniScriptLang {
 	 */
 	public static final String COMPILER_BACKJUMPDISABLED = "backjumpdisabled";//$NON-NLS-1$
 	/**
-	 * position in the binding for the entry vector names, needs to be String[]
+	 * position in the binding for the entry vector count, needs to be Integer
 	 */
-	public static final String COMPILER_START_VECTORS = "vectors";//$NON-NLS-1$
+	public static final String COMPILER_START_VECTOR_COUNT = "vectorcount";//$NON-NLS-1$
 
 	
 	private MiniScriptLang(){

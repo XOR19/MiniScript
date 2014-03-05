@@ -47,9 +47,12 @@ final class MiniScriptCompiledScript extends CompiledScript {
 	
 	private void execute(ScriptContext context) throws ScriptException{
 		programPointer = 0;
-		int start_vec=((Integer) context.getAttribute(MiniScriptLang.BINDING_START_VECTOR)).intValue();
-		if(startVectorIndexes!=null && start_vec>=0 && start_vec<startVectorIndexes.length)
-			programPointer = startVectorIndexes[start_vec];
+		Object obj = context.getAttribute(MiniScriptLang.BINDING_START_VECTOR);
+		if(obj instanceof Integer){
+			int start_vec = (Integer)obj;
+			if(startVectorIndexes!=null && start_vec>=0 && start_vec<startVectorIndexes.length)
+				programPointer = startVectorIndexes[start_vec];
+		}
 		while(programPointer<data.length){
 			int inst = data[programPointer++]&0xFF;
 			int v, v2;
@@ -193,7 +196,7 @@ final class MiniScriptCompiledScript extends CompiledScript {
 						params[i] = this.activePtr[this.ptr];
 					}
 				}
-				Object obj = context.getAttribute("func:"+func);//$NON-NLS-1$
+				obj = context.getAttribute("func:"+func);//$NON-NLS-1$
 				if(!(obj instanceof MiniScriptNativeFunction)){
 					throw new ScriptException(MiniScriptMessages.getLocaleMessage("function.not.exists", func));//$NON-NLS-1$
 				}

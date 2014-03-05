@@ -25,6 +25,7 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 	private String lineBev;
 	private int startLine;
 	private HashMap<String, Integer> labels = new HashMap<String, Integer>();
+	private int[] startVectors;
 	
 	@SuppressWarnings("unchecked")
 	MiniScriptCompiler(MiniScriptScriptEngine engine) {
@@ -41,14 +42,10 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 		if(obj instanceof HashMap){
 			replacements = (HashMap<String, Integer>) obj;
 		}
-	}
-	
-	private int[] entryLines(){
-		String[] startVectors=(String[]) engine.getContext().getAttribute(MiniScriptLang.COMPILER_START_VECTORS);
-		if(startVectors==null){
-			return new int[0];
+		obj = engine.get(MiniScriptLang.COMPILER_START_VECTOR_COUNT);
+		if(obj instanceof Integer){
+			startVectors = new int[(Integer)obj];
 		}
-		return new int[startVectors.length];
 	}
 
 	@Override
@@ -73,15 +70,14 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		int[] ret = entryLines();
-		byte[] data = codeGen.getData(ret);
+		byte[] data = codeGen.getData(startVectors);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data, ret);
+		return new MiniScriptCompiledScript(engine, data, startVectors);
 	}
 
 	@Override
@@ -103,15 +99,14 @@ final class MiniScriptCompiler implements Compilable, DiagnosticListener<Void>{
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		int[] ret = entryLines();
-		byte[] data = codeGen.getData(ret);
+		byte[] data = codeGen.getData(startVectors);
 		if(data==null){
 			if(firstDiagnostic==null){
 				throw new ScriptException(MiniScriptMessages.getLocaleMessage("errors.occured"));//$NON-NLS-1$
 			}
 			throw new ScriptException(firstDiagnostic.getMessage(Locale.getDefault()), MiniScriptLang.NAME, (int)firstDiagnostic.getLineNumber());
 		}
-		return new MiniScriptCompiledScript(engine, data, ret);
+		return new MiniScriptCompiledScript(engine, data, startVectors);
 	}
 	
 	private void compileLine(String line, int lineNum){
