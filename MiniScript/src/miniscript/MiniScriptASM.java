@@ -181,9 +181,12 @@ enum MiniScriptASM {
 		}, GROUP{
 			@Override
 			protected MiniScriptDummyInst makeInst(CompileInfo ci, String[] p) {
-				if(p.length<3){
-					makeDiagnostic(ci, Kind.ERROR, "use.compare.instead", p.length);//$NON-NLS-1$
+				if(p.length<2){
+					makeDiagnostic(ci, Kind.ERROR, "expect.at.least.two.param", p.length);//$NON-NLS-1$
 					return null;
+				}else if(p.length==2){
+					makeDiagnostic(ci, Kind.WARNING, "use.compare.instead", p.length);//$NON-NLS-1$
+					return new DummyInstNormal(ELM, ci.line, readValue(ci, p[0]), readValue(ci, p[1]));
 				}else{
 					MiniScriptValue v[] = new MiniScriptValue[p.length];
 					for(int i=0; i<p.length; i++){

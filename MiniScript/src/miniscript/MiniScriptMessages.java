@@ -41,10 +41,8 @@ final class MiniScriptMessages {
 		defaultMessages.put("expect.three.param", "Expect 3 param for %s but got %s");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("backjump.not.allowed", "Backjump not allowed");//$NON-NLS-1$ //$NON-NLS-2$
 		defaultMessages.put("duplicated.case.numbers", "Duplicated case %2$s");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("entry.not.exist", "The entry vector %s doesn't exist");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("entrynames.not.string.array", "The entry vector names aren't a String array");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("entryindexes.not.int.array", "The entry vector indexes aren't an int array");//$NON-NLS-1$ //$NON-NLS-2$
-		defaultMessages.put("use.compare.instead", "Expect at least 3 params for %s but got %s");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("use.compare.instead", "%s will be compiled to cmp, so use cmp");//$NON-NLS-1$ //$NON-NLS-2$
+		defaultMessages.put("expect.at.least.two.param", "Expect at least 2 params for %s but got %s");//$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private static HashMap<String, String> loadLocale(Locale locale){
