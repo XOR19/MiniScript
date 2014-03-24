@@ -1,10 +1,11 @@
 package miniscript;
 
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
 import javax.tools.Diagnostic;
 
-final class MiniScriptDiagnostic implements Diagnostic<Void> {
+final class MiniScriptDiagnostic implements Diagnostic<Void>, Callable<String[]> {
 
 	private Kind kind;
 	private int line;
@@ -61,6 +62,16 @@ final class MiniScriptDiagnostic implements Diagnostic<Void> {
 	@Override
 	public long getStartPosition() {
 		return NOPOS;
+	}
+
+	@Override
+	public String[] call() throws Exception {
+		String[] messageAndArguments = new String[args.length+1];
+		messageAndArguments[0] = message;
+		for(int i=0; i<args.length; i++){
+			messageAndArguments[i+1] = args[i]==null?"null":args[i].toString();
+		}
+		return messageAndArguments;
 	}
 
 }
